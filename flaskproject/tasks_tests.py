@@ -11,6 +11,16 @@ class appTestCase(unittest.TestCase):
 		tasks.app.config['TESTING']= True
 		self.app = tasks.app.test_client()
 		tasks.init_db()
+
+	def removeDB(self):
+		"""Delete after each test"""
+		os.close(self.db_fd)
+		os.unlink(tasks.app.config['DATABASE'])
+
+	def emptyDB(self):
+		rv = self.app.get('/')
+		assert b'No entries here so far' in rv.data
+		
 # CODE to fire up the server
 if __name__ == '__main__':
 	unittest.main()
