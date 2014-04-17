@@ -32,12 +32,19 @@ class appTestCase(unittest.TestCase):
 		assert 'You were logged in' in rv.data
 		rv = self.logout()
 		assert 'You were logged out' in rv.data
+		rv = self.login(tasks.app.config['USERNAME'] + 'x', tasks.app.config['PASSWORD'])
+		assert b'Invalid username' in rv.data
 
 	def test_add_to_DB(self):
 		self.login('admin','default')
 		rv = self.app.post('/add', data = dict(title='Pick up coffee'), follow_redirects=True)
 		assert 'Tasks on hand' not in rv.data
 		assert 'Pick up coffee' in rv.data
+
+	def test_delete_in_DB(self):
+		self.login('admin','default')
+		rv = self.app.get('/delete/<int:todo_id>', data = dict(todo_id='1'), follow_redirects=True)
+		assert 'Pick up coffee' not in rv.data
 # CODE to fire up the server
 if __name__ == '__main__':
 	unittest.main()
