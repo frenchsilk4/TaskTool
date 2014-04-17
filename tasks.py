@@ -42,6 +42,31 @@ def show_entries():
     todos = [dict(id=row[0],title=row[1],done=row[2]) for row in cur.fetchall()]
     return render_template('show_entries.html',todos=todos)
 
+@app.route('/add',methods=['POST'])
+def add_entry():
+	if not session.get('logged_in'):
+		abort(401)
+	g.db.execute('insert into todos(title,done) values(?,?)',[request.form['title'],0])
+	g.db.commit()
+	flash('New entry was successfully posted')
+	return redirect(url_for('show_entries'))
+
+@app.route('/update/<int:todo_id>')
+def update_entry(todo_id):
+    '''update todo with the id todo_id '''
+    g.db.execute('UPDATE todos SET done=? WHERE id=?',[1,int(todo_id)])
+    g.db.commit()
+    flash('New entry was successfully updated')
+    return redirect(url_for('show_entries'))
+
+@app.route('/delete/<int:todo_id>')
+def delete_entry(todo_id):
+    '''delete todo with the id todo_id''' 
+    g.db.cursor().execute('DELETE FROM todos WHERE rowid = ?', [int(todo_id)])
+    g.db.commit()
+    flash('Item was successfully deleted')
+    return redirect(url_for('show_entries'))
+
 @app.route('/login', methods=['GET','POST'])
 def login():
 	error = None
