@@ -19,7 +19,7 @@ class appTestCase(unittest.TestCase):
 
 	def test_emptyDB(self):
 		rv = self.app.get('/')
-		assert b'No entries here so far' in rv.data
+		assert b'Unbelievable. No entries here so far' in rv.data
 
 	def login(self, username, password):
 		return self.app.post('/login',data=dict(username=username, password=password), follow_redirects=True)
@@ -36,7 +36,7 @@ class appTestCase(unittest.TestCase):
 	def test_add_to_DB(self):
 		self.login('admin','default')
 		rv = self.app.post('/add', data = dict(title='Pick up coffee'), follow_redirects=True)
-		assert 'Tasks on hand' in rv.data
+		assert 'Tasks on hand' not in rv.data
 		assert 'Pick up coffee' in rv.data
 # CODE to fire up the server
 if __name__ == '__main__':
