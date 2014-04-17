@@ -33,6 +33,11 @@ class appTestCase(unittest.TestCase):
 		rv = self.logout()
 		assert 'You were logged out' in rv.data
 
+	def test_add_to_DB(self):
+		self.login('admin','default')
+		rv = self.app.post('/add', data = dict(title='Pick up coffee'), follow_redirects=True)
+		assert 'Tasks on hand' in rv.data
+		assert 'Pick up coffee' in rv.data
 # CODE to fire up the server
 if __name__ == '__main__':
 	unittest.main()
