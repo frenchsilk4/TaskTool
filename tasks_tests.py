@@ -30,10 +30,15 @@ class appTestCase(unittest.TestCase):
 	def test_login_logout(self):
 		rv = self.login('admin','default')
 		assert 'You were logged in' in rv.data
+
 		rv = self.logout()
 		assert 'You were logged out' in rv.data
+
 		rv = self.login(tasks.app.config['USERNAME'] + 'x', tasks.app.config['PASSWORD'])
 		assert b'Invalid username' in rv.data
+
+		rv = self.login(tasks.app.config['USERNAME'], tasks.app.config['PASSWORD'] + 'x')
+		assert b'Invalid password' in rv.data
 
 	def test_add_to_DB(self):
 		self.login('admin','default')
