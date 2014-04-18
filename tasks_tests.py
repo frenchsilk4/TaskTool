@@ -54,7 +54,15 @@ class appTestCase(unittest.TestCase):
 		self.login('admin','default')
 		rv = self.app.get('/update/1',follow_redirects=True)
 		assert b'New entry was successfully updated' in rv.data
-		
+	
+	def test_delete_in_DB(self):
+		"Make sure the database deletes item"
+		self.login('admin','default')
+		self.app.post('/add', data = dict(title='Stop by Berkeley Bowl'), follow_redirects=True)
+		self.logout()
+		self.login('admin','default')
+        rv = self.app.get('/delete/1', follow_redirects=True)
+        assert 'Stop by Berkeley Bowl' not in rv.data	
     
 
 		
