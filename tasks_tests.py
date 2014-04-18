@@ -43,8 +43,9 @@ class appTestCase(unittest.TestCase):
 
 	def test_delete_in_DB(self):
 		self.login('admin','default')
-		rv = self.app.get('/delete/<int:todo_id>', data = dict(todo_id='1'), follow_redirects=True)
+		rv = self.app.get('/delete/1', follow_redirects=True)
 		assert 'Pick up coffee' not in rv.data
+
 # CODE to fire up the server
 if __name__ == '__main__':
 	unittest.main()
