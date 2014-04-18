@@ -53,8 +53,9 @@ class appTestCase(unittest.TestCase):
 		self.logout()
 		self.login('admin','default')
 		rv = self.app.get('/update/1',follow_redirects=True)
-        assert 'New entry was successfully updated' in rv.data
-        assert 'Complete' not in rv.data
+		assert b'New entry was successfully updated' in rv.data
+		
+    
 
 		
 
