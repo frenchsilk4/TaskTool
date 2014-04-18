@@ -63,9 +63,7 @@ class appTestCase(unittest.TestCase):
 		self.login('admin','default')
         rv = self.app.get('/delete/1', follow_redirects=True)
         assert 'Stop by Berkeley Bowl' not in rv.data	
-    
-
-		
+    		
 
 # CODE to fire up the server
 if __name__ == '__main__':
