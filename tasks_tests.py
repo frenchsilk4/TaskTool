@@ -46,6 +46,13 @@ class appTestCase(unittest.TestCase):
 		assert 'Tasks on hand' not in rv.data
 		assert 'Pick up coffee' in rv.data
 
+	def test_update_to_DB(self):
+		self.login('admin','default')
+		rv = self.app.get('/update/1',follow_redirects=True)
+		print rv.data
+		assert 'New entry was successfully updated' in rv.data
+
+
 	def test_delete_in_DB(self):
 		self.login('admin','default')
 		rv = self.app.get('/delete/1', follow_redirects=True)
