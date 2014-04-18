@@ -52,8 +52,9 @@ class appTestCase(unittest.TestCase):
 		self.app.post('/add', data = dict(title='Drop off at Dry Cleaners'), follow_redirects=True)
 		self.logout()
 		self.login('admin','default')
-		rv = self.app.get('/')
-		print rv.data
+		rv = self.app.get('/update/1',follow_redirects=True)
+        assert 'New entry was successfully updated' in rv.data
+        assert 'Complete' not in rv.data
 
 		
 
