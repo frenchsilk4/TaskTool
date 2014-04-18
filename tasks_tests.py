@@ -47,15 +47,15 @@ class appTestCase(unittest.TestCase):
 		assert 'Pick up coffee' in rv.data
 
 	def test_update_to_DB(self):
+		"Make sure the database update works"
 		self.login('admin','default')
-		rv = self.app.get('/update/1',follow_redirects=True)
-		assert 'New entry was successfully updated' in rv.data
-
-
-	def test_delete_in_DB(self):
+		self.app.post('/add', data = dict(title='Drop off at Dry Cleaners'), follow_redirects=True)
+		self.logout()
 		self.login('admin','default')
-		rv = self.app.get('/delete/1', follow_redirects=True)
-		assert 'Pick up coffee' not in rv.data
+		rv = self.app.get('/')
+		print rv.data
+
+		
 
 # CODE to fire up the server
 if __name__ == '__main__':
