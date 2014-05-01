@@ -39,6 +39,10 @@ def teardown_request(exception):
 		db.close()
 
 ''' ------------------------------- your routes go here ------------------------------- '''
+@app.route('/index')
+def index_page():
+    return render_template('index.html')
+
 @app.route('/')
 def show_entries():
     cur = g.db.execute('select id,title,done from todos order by id desc')
@@ -83,14 +87,16 @@ def login():
 		else:
 			session['logged_in'] = True
 			flash('You were logged in')
-			return redirect(url_for('show_entries'))
+			#return redirect(url_for('show_entries'))
+			return redirect(url_for('index_page'))
 	return render_template('login.html', error = error)
 
 @app.route('/logout')
 def logout():
 	session.pop('logged_in',None)
 	flash('You were logged out')
-	return redirect(url_for('show_entries'))
+	#return redirect(url_for('show_entries'))
+	return redirect(url_for('index_page'))
 
 @app.route('/counts')
 def count_tasks():

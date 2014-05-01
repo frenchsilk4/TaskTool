@@ -1,5 +1,5 @@
 body	{font-family: sans-serif; background:#eee;}
-a,h1,h2	{color: #377ba8;}
+a,h1,h2	{color: #5aba24#;}
 h1,h2	{font-family: 'Georgia', serif; margin:0;}
 h1	{border-bottom: 2px solid #eee;}
 h2	{font-size: 1.2em;}
@@ -15,10 +15,15 @@ a 	{text-decoration: none;}
 .flash	{background: #cee5F5; padding: 0.5em; border:1px solid #aacbe2;}
 .error	{background: #f0d6d6; padding: 0.5em;}
 .complete li	{text-decoration:line-through;}
+.menu1	{color:#283e10;padding: 0.5em; border:5px solid #527d21;}
+.time	{padding-top: 10px;}
+.mnIts	{padding:20px;}
 
 #column1-wrap {float:left; width:100%;}
-#column1 {background-color: aliceblue; margin-right: 375px;}
-#column2 {background-color: lime; float: left; width: 150px; margin-left: -200px;}
+#column1 {background-color:#639727; margin-right: 375px;}
+#column2 {background-color:#314a13; float: left; width: 150px; margin-left: -200px;}
 #clear {clear: both;}
+#mainhead	{color: #21330D;}
 
 #result	{font-size: 48px; font-family: serif; padding-left: 45px;}
+#delresult	{font-size: 48px; font-family: serif; padding-left: 45px;}

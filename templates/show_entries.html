@@ -2,7 +2,7 @@
 {% extends "layout.html" %}
 {% block body %}
 	{% if session.logged_in %}
-	<div>{{moment().format('LLLL')}}</div>
+	<div class='time'>{{moment().format('LLLL')}}</div>
 		<form action="{{ url_for('add_entry') }}" method=post class=add-entry>
 			<dl>
 				<dt>Task:
