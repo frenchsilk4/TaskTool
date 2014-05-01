@@ -1,14 +1,16 @@
+
 {% extends "layout.html" %}
 {% block body %}
 	{% if session.logged_in %}
+	<div>{{moment().format('LLLL')}}</div>
 		<form action="{{ url_for('add_entry') }}" method=post class=add-entry>
 			<dl>
 				<dt>Task:
-				<dd><input type=text size=30 name=title>	
+				<dd><input type=text size=30 name=title>
 				<dd><input type=submit value=Add>
 			</dl>
 		</form>
-	{% endif %}
+	
 	<ul class=todos>
 	{% for todo in todos %}
 		{% if todo.done == 1 %}
@@ -20,5 +22,15 @@
 		<li><em>Unbelievable. No entries here so far </em>
 	{% endfor %}
 		</ul>
+	<div id='column1-wrap'>
+	<div id='column1'><p><a href="javascript:void();" id="calculate">Completed Tasks:</a></p>
+	<span id='result'>?</span>
 	</div>
+	</div>
+	<div id='column2'><p><a href="javascript:void();" id="delcalculate">Deleted Tasks:</p>
+	<span id='delresult'>?</span>
+	</div>
+	<div id='clear'></div>
+	</div>
+	{% endif %}
 	{% endblock %}

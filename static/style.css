@@ -15,3 +15,10 @@ a 	{text-decoration: none;}
 .flash	{background: #cee5F5; padding: 0.5em; border:1px solid #aacbe2;}
 .error	{background: #f0d6d6; padding: 0.5em;}
 .complete li	{text-decoration:line-through;}
+
+#column1-wrap {float:left; width:100%;}
+#column1 {background-color: aliceblue; margin-right: 375px;}
+#column2 {background-color: lime; float: left; width: 150px; margin-left: -200px;}
+#clear {clear: both;}
+
+#result	{font-size: 48px; font-family: serif; padding-left: 45px;}

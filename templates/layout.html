@@ -1,18 +1,40 @@
 <!doctype html>
-<title>Aisha's To-do List</title>
+<title>Aisha'se To-do List</title>
+{{moment.include_jquery()}}
+{{moment.include_moment()}}
 <link rel=stylesheet type=text/css href="{{url_for('static',filename='style.css')}}">
+<script type="text/javascript">
+    $(function(){
+        $('a#calculate').bind('click', function(){
+            $.getJSON('/counts',{
+
+            },function(data){
+                $('#result').text(data.result);
+            });
+            return false;
+        });
+
+        $('a#delcalculate').bind('click', function(){
+            $.getJSON('/delcounts',{
+
+            },function(data){
+                $('#delresult').text(data.result);
+            });
+            return false;
+        });
+    });
+</script>
 <div class=page>
-	<h1>Aisha's To-do List</h1>
-	<div class=metanav>
-		<a href="{{ url_for('login') }}">log in</a>
-	{% if not session.logged_in %}
-		<a href="{{ url_for('login') }}">log in</a>
-	{% else %}
-		<a href="{{ url_for('logout') }}">log out</a>
-	{% endif %}
-	</div>
-	{% for message in get_flashed_messages() %}
-		<div class=flash>{{message}}</div>
-	{% endfor %}
-	{% block body %}{% endblock %}
+    <h1>Aisha' To-do List</h1>
+    <div class=metanav>
+    {% if not session.logged_in %}
+        <a href="{{ url_for('login') }}">log in</a>
+    {% else %}
+        <a href="{{ url_for('logout') }}">log out</a>
+    {% endif %}
+    </div>
+    {% for message in get_flashed_messages() %}
+        <div class=flash>{{message}}</div>
+    {% endfor %}
+    {% block body %}{% endblock %}
 </div>

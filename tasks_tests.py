@@ -2,6 +2,8 @@ import os
 import tasks
 import unittest
 import tempfile
+import BeautifulSoup
+import json
 
 class appTestCase(unittest.TestCase):
 
@@ -16,10 +18,6 @@ class appTestCase(unittest.TestCase):
 		"""Delete after each test"""
 		os.close(self.db_fd)
 		os.unlink(tasks.app.config['DATABASE'])
-
-	def test_emptyDB(self):
-		rv = self.app.get('/')
-		assert b'Unbelievable. No entries here so far' in rv.data
 
 	def login(self, username, password):
 		return self.app.post('/login',data=dict(username=username, password=password), follow_redirects=True)
@@ -40,6 +38,11 @@ class appTestCase(unittest.TestCase):
 		rv = self.login(tasks.app.config['USERNAME'], tasks.app.config['PASSWORD'] + 'x')
 		assert b'Invalid password' in rv.data
 
+	def test_emptyDB(self):
+		self.login('admin','default')
+		rv = self.app.get('/')
+		assert b'No entries here so far' in rv.data
+
 	def test_add_to_DB(self):
 		self.login('admin','default')
 		rv = self.app.post('/add', data = dict(title='Pick up coffee'), follow_redirects=True)
@@ -54,16 +57,49 @@ class appTestCase(unittest.TestCase):
 		self.login('admin','default')
 		rv = self.app.get('/update/1',follow_redirects=True)
 		assert b'New entry was successfully updated' in rv.data
-	
-	def test_delete_in_DB(self):
-		"Make sure the database deletes item"
+
+	def test_delete_to_DB2(self):
+		"Make sure the database update works"
 		self.login('admin','default')
-		self.app.post('/add', data = dict(title='Stop by Berkeley Bowl'), follow_redirects=True)
+		self.app.post('/add', data = dict(title='Drop off at Dry Cleaners'), follow_redirects=True)
 		self.logout()
 		self.login('admin','default')
-        rv = self.app.get('/delete/1', follow_redirects=True)
-        assert 'Stop by Berkeley Bowl' not in rv.data	
-    		
+		rv = self.app.get('/delete/1',follow_redirects=True)
+		assert b'Drop Off at Dry Cleaners' not in rv.data
+
+	def test_time_is_displayed(self):
+		self.login('admin','default')
+		rv = self.app.get('/')
+		soup = BeautifulSoup.BeautifulSoup(rv.data)
+		ctime = soup.span.string
+		assert ctime in rv.data
+
+	def test_count_completedtasks(self):
+		self.login('admin','default')
+		self.app.post('/add', data = dict(title='Drop off at Dry Cleaners'), follow_redirects=True)
+		self.app.post('/add', data = dict(title='Pickup Grad papers'), follow_redirects=True)
+		self.logout()
+		self.login('admin','default')
+		self.app.get('/update/1',follow_redirects=True)
+		rv = self.app.get('/counts',follow_redirects=True)
+		assert '1' in rv.data
+
+	def test_count_deltasks(self):
+		self.login('admin','default')
+		self.app.post('/add', data = dict(title='Agile eng best book pickup'), follow_redirects=True)
+		self.app.post('/add', data = dict(title='Pickup Grad papers'), follow_redirects=True)
+		self.logout()
+		self.login('admin','default')
+		self.app.get('/delete/1',follow_redirects=True)
+		rv = self.app.get('/delcounts',follow_redirects=True)
+		data = json.loads(rv.data)
+		#rhs = rv.data.split(":")
+		#soup = BeautifulSoup.BeautifulSoup(rv.data)
+		#dcount = soup.find(id="delresult")
+		print data['result']
+		self.assertEqual(1, data['result'],msg=None)
+
+
 
 # CODE to fire up the server
 if __name__ == '__main__':

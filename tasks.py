@@ -1,7 +1,8 @@
 # all the imports
 import sqlite3
 from contextlib import closing
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash,jsonify
+from flask.ext.moment import Moment
 
 ''' ------------------------------- setup and initialize app ------------------------------- '''
 #configuration
@@ -14,7 +15,9 @@ PASSWORD = 'default'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+moment = Moment(app)
 
+del_counter = 0
 #connect to database
 def connect_db():
 	return sqlite3.connect(app.config['DATABASE'])
@@ -64,6 +67,8 @@ def delete_entry(todo_id):
     '''delete todo with the id todo_id''' 
     g.db.cursor().execute('DELETE FROM todos WHERE rowid = ?', [int(todo_id)])
     g.db.commit()
+    global del_counter
+    del_counter = del_counter + 1
     flash('Item was successfully deleted')
     return redirect(url_for('show_entries'))
 
@@ -86,7 +91,29 @@ def logout():
 	session.pop('logged_in',None)
 	flash('You were logged out')
 	return redirect(url_for('show_entries'))
-	
+
+@app.route('/counts')
+def count_tasks():
+	cnt = g.db.execute('SELECT COUNT(rowid) as c FROM todos WHERE done=1')
+	sum = [dict(c=row[0]) for row in cnt.fetchall()]
+	result = sum[0]['c']
+	return jsonify(result=result)
+
+@app.route('/delcounts')
+def count_deltasks():
+	return jsonify(result=del_counter)
+
+@app.route('/email')
+def send_email():
+	fromaddr = 'aisha.kigongo@gmail.com'
+	toaddrs = 'aisha.kigongo@gmail.com'
+	msg = 'Task was completed'
+
+	server = smtplib.SMTP('smtp.gmail.com:587')
+	server.starttls()
+	server.sendmail(fromaddr,toaddrs,msg)
+	server.quit()
+
 # CODE to fire up the server
 if __name__ == '__main__':
 	app.run()
