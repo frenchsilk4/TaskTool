@@ -88,6 +88,7 @@ class appTestCase(unittest.TestCase):
 		self.login('admin','default')
 		self.app.post('/add', data = dict(title='Agile eng best book pickup'), follow_redirects=True)
 		self.app.post('/add', data = dict(title='Pickup Grad papers'), follow_redirects=True)
+		self.app.post('/add', data = dict(title='Transoformative leadership workshop'), follow_redirects=True)
 		self.logout()
 		self.login('admin','default')
 		self.app.get('/delete/1',follow_redirects=True)
