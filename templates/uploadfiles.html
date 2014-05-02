@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+	{% if session.logged_in %}
+	<div class='time'>{{moment().format('LLLL')}}</div>
+		<hr/>
+      <div>
+      
+      <form action="upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file"><br /><br />
+        <input type="submit" value="Upload">
+      </form>
+      </div>
+	</div>
+	{% endif %}
+	{% endblock %}

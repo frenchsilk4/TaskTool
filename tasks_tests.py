@@ -5,6 +5,7 @@ import tempfile
 import BeautifulSoup
 import json
 
+RESULT = False
 class appTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -97,8 +98,23 @@ class appTestCase(unittest.TestCase):
 		#rhs = rv.data.split(":")
 		#soup = BeautifulSoup.BeautifulSoup(rv.data)
 		#dcount = soup.find(id="delresult")
-		print data['result']
+		#print data['result']
 		self.assertEqual(1, data['result'],msg=None)
+
+	def test_launch_organizer(self):
+		"""test that the clicking organizer launches organizer page"""
+		rv = self.login('admin','default')
+		assert 'Upload Images' in rv.data
+		rv = self.app.get('/', follow_redirects=True)
+		assert b'No entries here so far' in rv.data
+
+	# issues testing file upload. The file uploads without any issues
+	def test_upload_image(self):
+		self.login('admin','default')
+		rv = self.app.post('/upload', {'file':'gorgeous.jpg'})
+		print rv.data
+
+
 
 
 
